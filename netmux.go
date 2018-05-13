@@ -16,7 +16,7 @@ type Netmux struct {
 func New(l net.Listener, opts ...Option) (*Netmux, error) {
 	var err error
 
-	nm := &netmux{
+	nm := &Netmux{
 		l: l,
 	}
 
@@ -36,7 +36,7 @@ func New(l net.Listener, opts ...Option) (*Netmux, error) {
 }
 
 // Listen wraps net.Listen and New, passing the network, address, and options.
-func Listen(network, address string, opts ...Option) (*netmux, error) {
+func Listen(network, address string, opts ...Option) (*Netmux, error) {
 	l, err := net.Listen(network, address)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func Listen(network, address string, opts ...Option) (*netmux, error) {
 }
 
 // Listen creates a listener that matches any of the supplied matchers.
-func (nm *netmux) Listen(matchers ...Matcher) *Listener {
+func (nm *Netmux) Listen(matchers ...Matcher) *Listener {
 	l := &Listener{
 		nm: nm,
 	}

@@ -1,4 +1,4 @@
-package connmux
+package netmux
 
 // Option is a connection multiplexor option.
-type Option func(*ConnMux) error
+type Option func(*Netmux) error

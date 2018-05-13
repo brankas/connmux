@@ -1,4 +1,4 @@
-package connmux
+package netmux
 
 // Error is a connection mux error.
 type Error string

@@ -2,7 +2,9 @@
 // based on content.
 package netmux
 
-import "net"
+import (
+	"net"
+)
 
 // Netmux is a connection multiplexor.
 type Netmux struct {
@@ -51,9 +53,4 @@ func (nm *Netmux) Listen(matchers ...Matcher) *Listener {
 	}
 
 	return l
-}
-
-// Listener
-type Listener struct {
-	nm *Netmux
 }

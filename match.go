@@ -1,6 +1,8 @@
 package netmux
 
-import "io"
+import (
+	"io"
+)
 
 // Matcher is the common connection matching interface.
 type Matcher interface {

@@ -1,6 +1,6 @@
 package netmux
 
-// Error is a connection mux error.
+// Error is a network connection mux error.
 type Error string
 
 // Error satisfies the error interface.

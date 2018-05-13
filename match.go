@@ -28,3 +28,10 @@ func TLS() MatchFunc {
 		return false
 	}
 }
+
+// HTTP1Fast creates a fast matcher for HTTP1.
+func HTTP1Fast() MatchFunc {
+	return func(w io.Writer, r io.Reader) bool {
+		return false
+	}
+}

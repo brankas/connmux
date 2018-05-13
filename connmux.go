@@ -35,15 +35,6 @@ func New(l net.Listener, opts ...Option) (*ConnMux, error) {
 	return cm, nil
 }
 
-// Listen wraps net.Listen and New, passing the network, address, and options.
-func Listen(network, address string, opts ...Option) (*ConnMux, error) {
-	l, err := net.Listen(network, address)
-	if err != nil {
-		return nil, err
-	}
-	return New(l, opts...)
-}
-
 // Listen creates a listener that matches any of the supplied matchers.
 func (cm *ConnMux) Listen(matchers ...Matcher) *Listener {
 	l := &Listener{
@@ -53,6 +44,22 @@ func (cm *ConnMux) Listen(matchers ...Matcher) *Listener {
 	return l
 }
 
+// Listener
 type Listener struct {
 	cm *ConnMux
+}
+
+// Accept satisfies the net.Listener interface.
+func (l *Listener) Accept() (net.Conn, error) {
+	return nil, nil
+}
+
+// Close satisfies the net.Listener interface.
+func (l *Listener) Close() error {
+	return nil
+}
+
+// Addr satisfies the net.Listener interface.
+func (l *Listener) Addr() net.Addr {
+	return nil
 }

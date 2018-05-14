@@ -1,12 +1,13 @@
-// Package netmux provides a simple way to multiplex (mux) net connections
+// Package netmux provides a simple way to multiplex (mux) network connections
 // based on content.
 package netmux
 
 import (
+	"crypto/tls"
 	"net"
 )
 
-// Netmux is a connection multiplexor.
+// Netmux is a network connection multiplexor.
 type Netmux struct {
 	l net.Listener
 
@@ -37,7 +38,8 @@ func New(l net.Listener, opts ...Option) (*Netmux, error) {
 	return nm, nil
 }
 
-// Listen wraps net.Listen and New, passing the network, address, and options.
+// Listen is a utility func wrapping a call to net.Listen and passing the
+// returned net.Listener and provided options to New.
 func Listen(network, address string, opts ...Option) (*Netmux, error) {
 	l, err := net.Listen(network, address)
 	if err != nil {
@@ -46,11 +48,20 @@ func Listen(network, address string, opts ...Option) (*Netmux, error) {
 	return New(l, opts...)
 }
 
-// Listen creates a listener that matches any of the supplied matchers.
+// ListenTLS is a utility func wrapping a call to tls.Listen and passing the
+// returned net.Listener and provided options to New.
+func ListenTLS(network, laddr string, config *tls.Config, opts ...Option) (*Netmux, error) {
+	l, err := tls.Listen(network, laddr, config)
+	if err != nil {
+		return nil, err
+	}
+	return New(l, opts...)
+}
+
+// Listen creates a listener matching any supplied matchers.
 func (nm *Netmux) Listen(matchers ...Matcher) *Listener {
 	l := &Listener{
 		nm: nm,
 	}
-
 	return l
 }

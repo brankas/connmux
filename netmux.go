@@ -11,6 +11,9 @@ import (
 type Netmux struct {
 	l net.Listener
 
+	// proxies are the allowed proxy networks.
+	proxies []*net.IPNet
+
 	// Default is the default listener.
 	Default *Listener
 }

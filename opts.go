@@ -34,7 +34,6 @@ func Proxy(networkAddresses ...string) Option {
 				return fmt.Errorf("invalid ip or cidr %q", s)
 			}
 			nm.proxies = append(nm.proxies, ipNet)
-			return nil
 		}
 		return nil
 	}

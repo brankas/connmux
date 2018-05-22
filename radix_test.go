@@ -28,3 +28,39 @@ func TestRadixTree(t *testing.T) {
 		pt.match([]byte(s+"$"), false)
 	}
 }
+
+func TestRadixTreeMatch(t *testing.T) {
+	return
+	tests := []struct {
+		prefixes []string
+		val      string
+		prefix   bool
+		exp      bool
+	}{
+		{nil, "a", false, false}, // 0
+		{nil, "", false, false},
+		{nil, "a", true, false},
+		{[]string{}, "", false, false},
+		{[]string{}, "", true, false},
+
+		{[]string{""}, "", false, false}, // 5
+		{[]string{""}, "", true, false},
+
+		{[]string{"a"}, "", false, false}, // 7
+		{[]string{"a"}, "", true, false},
+		{[]string{"a", "aa"}, "", false, false},
+		{[]string{"a", "aa"}, "", true, false},
+
+		{[]string{"a"}, "a", false, true}, // 11
+		{[]string{"a"}, "a", true, true},
+		{[]string{"b", "aa"}, "a", false, true},
+		{[]string{"b", "aa"}, "a", true, true},
+	}
+	for i, test := range tests {
+		rt := newRadixTreeString(test.prefixes...)
+		res := rt.match([]byte(test.val), test.prefix)
+		if res != test.exp {
+			t.Errorf("test %d for %v radixTree.match(%q, %t) should be %t", i, test.prefixes, test.val, test.prefix, test.exp)
+		}
+	}
+}

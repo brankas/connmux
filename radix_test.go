@@ -30,7 +30,6 @@ func TestRadixTree(t *testing.T) {
 }
 
 func TestRadixTreeMatch(t *testing.T) {
-	return
 	tests := []struct {
 		prefixes []string
 		val      string
@@ -38,13 +37,13 @@ func TestRadixTreeMatch(t *testing.T) {
 		exp      bool
 	}{
 		{nil, "a", false, false}, // 0
-		{nil, "", false, false},
-		{nil, "a", true, false},
-		{[]string{}, "", false, false},
-		{[]string{}, "", true, false},
+		{nil, "", false, true},
+		{nil, "a", true, true},
+		{[]string{}, "", false, true},
+		{[]string{}, "", true, true},
 
-		{[]string{""}, "", false, false}, // 5
-		{[]string{""}, "", true, false},
+		{[]string{""}, "", false, true}, // 5
+		{[]string{""}, "", true, true},
 
 		{[]string{"a"}, "", false, false}, // 7
 		{[]string{"a"}, "", true, false},
@@ -53,8 +52,42 @@ func TestRadixTreeMatch(t *testing.T) {
 
 		{[]string{"a"}, "a", false, true}, // 11
 		{[]string{"a"}, "a", true, true},
-		{[]string{"b", "aa"}, "a", false, true},
-		{[]string{"b", "aa"}, "a", true, true},
+		{[]string{"b", "aa"}, "a", false, false},
+		{[]string{"b", "aa"}, "a", true, false},
+		{[]string{"aa", "b"}, "a", false, false},
+		{[]string{"aa", "b"}, "a", true, false},
+
+		{[]string{"foo", "bar"}, "foo", true, true}, // 17
+		{[]string{"foo", "bar"}, "foo", false, true},
+		{[]string{"foo", "bar"}, "bar", true, true},
+		{[]string{"foo", "bar"}, "bar", false, true},
+
+		{[]string{"foo ", "bar"}, "foo", true, false}, // 21
+		{[]string{"foo ", "bar"}, "foo", false, false},
+		{[]string{"foo ", "bar"}, "bar", true, true},
+		{[]string{"foo ", "bar"}, "bar", false, true},
+
+		{[]string{" foo ", "bar"}, "foo", true, false}, // 25
+		{[]string{" foo ", "bar"}, "foo", false, false},
+		{[]string{" foo ", "bar"}, "bar", true, true},
+		{[]string{" foo ", "bar"}, "bar", false, true},
+
+		{[]string{"foo", "food"}, "foo", true, true}, // 29
+		{[]string{"foo", "food"}, "food", true, true},
+		{[]string{"foo", "food"}, "foo", false, true},
+		{[]string{"foo", "food"}, "food", false, true},
+
+		{[]string{"food", "foo"}, "foo", true, true}, // 33
+		{[]string{"food", "foo"}, "food", true, true},
+		{[]string{"food", "foo"}, "foo", false, true},
+		{[]string{"food", "foo"}, "food", false, true},
+
+		{[]string{"foo", "foobar"}, "foo", true, true}, // 37
+		{[]string{"foo", "foobar"}, "food", true, true},
+		{[]string{"foo", "foobar"}, "bar", true, false},
+		{[]string{"foo", "foobar"}, "foo", false, true},
+		{[]string{"foo", "foobar"}, "food", false, false},
+		{[]string{"foo", "foobar"}, "bar", true, false}, // 42
 	}
 	for i, test := range tests {
 		rt := newRadixTreeString(test.prefixes...)
